@@ -192,25 +192,25 @@ export class RegisterComponent extends LitElement {
               <div class="button-container">
                 <styled-lion-button>Register</styled-lion-button>
               </div>
+
+              <div class="separator-container">
+                <span class="separator-container__custom-hr"></span>
+                <div class="separator-container__separator">
+                  <span>OR</span>
+                </div>
+              </div>
+
+              <div class="form-footer">
+                <div class="footer-text">Already registered?</div>
+                <button
+                  class="footer-link"
+                  @click=${() => this.navigateTo('login')}
+                >
+                  Login
+                </button>
+              </div>
             </form>
           </lion-form>
-
-          <div class="separator-container">
-            <span class="separator-container__custom-hr"></span>
-            <div class="separator-container__separator">
-              <span>OR</span>
-            </div>
-          </div>
-
-          <div class="form-footer">
-            <div class="footer-text">Already registered?</div>
-            <button
-              class="footer-link"
-              @click=${() => this.navigateTo('login')}
-            >
-              Login
-            </button>
-          </div>
         </div>
         <div class="image-container">
           <img

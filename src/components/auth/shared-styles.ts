@@ -80,7 +80,7 @@ export const sharedStyles = css`
     border: 1px solid #ccd1d2;
     position: absolute;
     background: #ffffff;
-    color: #99a3a4;
+    color: #333;
     font-size: 12px;
     z-index: 999;
   }

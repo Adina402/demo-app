@@ -9,7 +9,7 @@ export class AppFooter extends LitElement {
       flex-direction: column;
       align-items: center;
       font-size: 12px;
-      color: #808c8d;
+      color: #333;
       font-family: 'Inter', sans-serif;
       width: 100%;
       padding: 20px;
