@@ -1,5 +1,8 @@
 import { LionInputEmail } from '@lion/ui/input-email.js';
 import { css } from 'lit';
+import { loadDefaultFeedbackMessages } from '@lion/ui/validate-messages.js';
+
+loadDefaultFeedbackMessages();
 
 export class StyledLionInputEmail extends LionInputEmail {
   static get styles() {
@@ -17,6 +20,10 @@ export class StyledLionInputEmail extends LionInputEmail {
           font-size: 17px;
           text-align: left;
           color: #71397c;
+        }
+
+        .form-field__feedback {
+          color: #ff383b;
         }
 
         :host ::slotted(input) {

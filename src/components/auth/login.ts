@@ -24,12 +24,24 @@ export class LoginComponent extends LitElement {
       width: 100%;
     }
 
+    @media (max-width: 768px) {
+      :host {
+        padding: 20px 20px;
+      }
+    }
+
     .container {
       display: flex;
       flex-direction: row;
       gap: 40px;
       width: 100%;
       align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
     }
 
     a {
@@ -39,6 +51,7 @@ export class LoginComponent extends LitElement {
 
     .form-container {
       flex: 1;
+      width: 100%;
     }
 
     .form-container h2 {
@@ -111,6 +124,12 @@ export class LoginComponent extends LitElement {
       max-width: 100%;
       height: auto;
       border-radius: 8px;
+    }
+
+    @media (max-width: 768px) {
+      img {
+        max-width: 70%;
+      }
     }
   `;
 

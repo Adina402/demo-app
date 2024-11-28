@@ -22,6 +22,10 @@ class StyledDatePicker extends LionInputDatepicker {
           color: #71397c;
         }
 
+        .form-field__feedback {
+          color: #ff383b;
+        }
+
         :host ::slotted(input) {
           margin: 20px 0;
           background-color: #ffffff;

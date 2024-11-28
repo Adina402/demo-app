@@ -17,8 +17,7 @@ export class UserInfoCard extends LitElement {
     :host {
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      padding: 80px 40px;
+      padding: 40px 40px;
       border-radius: 16px;
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.08);
       background-color: #fff;
@@ -39,12 +38,13 @@ export class UserInfoCard extends LitElement {
     }
 
     .info-row {
-      margin-bottom: 10px;
+      padding: 20px 10px;
     }
 
     .label {
       font-weight: bold;
       color: #873999;
+      text-align: left;
     }
 
     .value {
@@ -60,7 +60,7 @@ export class UserInfoCard extends LitElement {
         <div class="card-content">
           <div class="info-row">
             <span class="label">First Name:</span>
-            <span class="value">${this.firstName}</span>
+            <span class="value">First name</span>
           </div>
           <div class="info-row">
             <span class="label">Last Name:</span>

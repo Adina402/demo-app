@@ -13,6 +13,13 @@ export class DemoApp extends LitElement {
       width: 60%;
       margin: 40px auto;
     }
+
+    @media (max-width: 768px) {
+      main {
+        width: 80%;
+        margin: 20px 20px;
+      }
+    }
   `;
 
   render() {
@@ -20,9 +27,9 @@ export class DemoApp extends LitElement {
       <ui-header></ui-header>
 
       <main>
-        <!--                        <ui-login-component></ui-login-component>-->
-        <!--        <ui-register-component></ui-register-component>-->
-        <user-info-card></user-info-card>
+        <!--        <ui-login-component></ui-login-component>-->
+        <ui-register-component></ui-register-component>
+        <!--                <user-info-card></user-info-card>-->
       </main>
 
       <ui-footer></ui-footer>

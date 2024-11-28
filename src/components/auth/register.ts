@@ -28,6 +28,8 @@ export class RegisterComponent extends LitElement {
 
   @property({ type: String }) nationality: string = '';
 
+  @property({ type: String }) birthDate: string = '';
+
   @property({ type: String }) emailAddress: string = '';
 
   @property({ type: String }) phoneNumber: string = '';
@@ -48,12 +50,24 @@ export class RegisterComponent extends LitElement {
       width: 100%;
     }
 
+    @media (max-width: 768px) {
+      :host {
+        padding: 20px 20px;
+      }
+    }
+
     .container {
       display: flex;
       flex-direction: row;
       gap: 40px;
       width: 100%;
       align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
     }
 
     a {
@@ -148,6 +162,12 @@ export class RegisterComponent extends LitElement {
       height: auto;
       border-radius: 8px;
     }
+
+    @media (max-width: 768px) {
+      img {
+        max-width: 70%;
+      }
+    }
   `;
 
   firstUpdated() {
@@ -180,12 +200,17 @@ export class RegisterComponent extends LitElement {
                   @input=${(e: Event) => this.updateField(e, 'emailAddress')}
                 ></styled-lion-input-email>
 
-                <styled-date-picker label="Birth date"></styled-date-picker>
+                <styled-date-picker
+                  name="birthDate"
+                  label="Birth date"
+                  @input=${(e: Event) => this.updateField(e, 'birthDate')}
+                ></styled-date-picker>
               </div>
 
               <styled-select
                 labelText="Choose Your Nationality"
                 name="nationality"
+                @input=${(e: Event) => this.updateField(e, 'nationality')}
               >
                 <select slot="input">
                   ${this.nationalities.length === 0
@@ -271,7 +296,8 @@ export class RegisterComponent extends LitElement {
       | 'lastName'
       | 'firstName'
       | 'phoneNumber'
-      | 'nationality',
+      | 'nationality'
+      | 'birthDate',
   ): void {
     const input = e.target as HTMLInputElement;
     this[field] = input.value;
@@ -302,6 +328,14 @@ export class RegisterComponent extends LitElement {
   }
 
   private handleLogin(): void {
-    console.log('Logging in with:', this.emailAddress, this.password);
+    console.log(
+      'Logging in with:',
+      this.emailAddress,
+      this.password,
+      this.lastName,
+      this.firstName,
+      this.phoneNumber,
+      this.birthDate,
+    );
   }
 }

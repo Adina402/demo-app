@@ -1,5 +1,8 @@
 import { LionInputTelDropdown } from '@lion/ui/input-tel-dropdown.js';
 import { css } from 'lit';
+import { loadDefaultFeedbackMessages } from '@lion/ui/validate-messages.js';
+
+loadDefaultFeedbackMessages();
 
 export class StyledLionInputTelDropdown extends LionInputTelDropdown {
   static get styles() {
@@ -17,6 +20,10 @@ export class StyledLionInputTelDropdown extends LionInputTelDropdown {
           font-size: 17px;
           text-align: left;
           color: #71397c;
+        }
+
+        .form-field__feedback {
+          color: #ff383b;
         }
 
         :host ::slotted(input) {
