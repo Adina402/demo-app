@@ -255,7 +255,7 @@ export class RegisterComponent extends LitElement {
 
       this.requestUpdate();
     } catch (error) {
-      this.nationalities = [];
+      this.nationalities = ['Romanian', 'British', 'American'];
       this.requestUpdate();
     }
   }
