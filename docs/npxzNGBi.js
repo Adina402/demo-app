@@ -1,0 +1,1 @@
+var e={nextMonth:"P\u0159\xED\u0161t\xED m\u011Bs\xEDc",previousMonth:"P\u0159edchoz\xED m\u011Bs\xEDc",nextFullYear:"P\u0159\xED\u0161t\xED rok",previousFullYear:"P\u0159edchoz\xED rok"};export{e as default};
