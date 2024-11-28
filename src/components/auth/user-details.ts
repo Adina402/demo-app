@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { UserRegistration } from '../../models/user.model.js';
 
 @customElement('user-info-card')
 export class UserInfoCard extends LitElement {
@@ -11,13 +12,13 @@ export class UserInfoCard extends LitElement {
 
   @property({ type: String }) nationality = '';
 
-  @property({ type: String }) dateOfBirth = '';
+  @property({ type: String }) phoneNumber = '';
 
   static styles = css`
     :host {
       display: flex;
       flex-direction: column;
-      padding: 40px 40px;
+      padding: 80px 40px;
       border-radius: 16px;
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.08);
       background-color: #fff;
@@ -25,60 +26,95 @@ export class UserInfoCard extends LitElement {
       width: 100%;
     }
 
-    .card h2 {
-      text-align: center;
+    .user-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 25px;
+      gap: 15px;
+    }
+
+    .user-icon {
+      width: 60px;
+      height: 60px;
+      background-color: #362855;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    h2 {
+      color: #333;
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .info-grid {
+      display: grid;
+      gap: 15px;
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .info-label {
       color: #774181;
-      font-size: 48px;
-      font-weight: bold;
+      font-weight: 600;
+      opacity: 0.8;
     }
 
-    .card-content {
-      font-size: 1rem;
-      color: #202124;
-    }
-
-    .info-row {
-      padding: 20px 10px;
-    }
-
-    .label {
-      font-weight: bold;
-      color: #873999;
-      text-align: left;
-    }
-
-    .value {
-      margin-left: 10px;
-      color: #808c8d;
+    .info-value {
+      color: #333;
+      font-weight: 500;
     }
   `;
 
+  firstUpdated() {
+    this.loadSavedRegistration();
+  }
+
+  private loadSavedRegistration() {
+    const savedRegistration = localStorage.getItem('currentUser');
+    if (savedRegistration) {
+      const parsedRegistration: UserRegistration =
+        JSON.parse(savedRegistration);
+      this.firstName = parsedRegistration.firstName;
+      this.lastName = parsedRegistration.lastName;
+      this.nationality = parsedRegistration.nationality;
+      this.email = parsedRegistration.emailAddress;
+      this.phoneNumber = parsedRegistration.phoneNumber;
+      this.requestUpdate();
+    }
+  }
+
   render() {
+    const initials = `${this.firstName[0] || ''}${this.lastName[0] || ''}`;
+
     return html`
-      <div class="card">
-        <h2>User Information</div>
-        <div class="card-content">
-          <div class="info-row">
-            <span class="label">First Name:</span>
-            <span class="value">First name</span>
-          </div>
-          <div class="info-row">
-            <span class="label">Last Name:</span>
-            <span class="value">${this.lastName}</span>
-          </div>
-          <div class="info-row">
-            <span class="label">Email:</span>
-            <span class="value">${this.email}</span>
-          </div>
-          <div class="info-row">
-            <span class="label">Nationality:</span>
-            <span class="value">${this.nationality}</span>
-          </div>
-          <div class="info-row">
-            <span class="label">Date of Birth:</span>
-            <span class="value">${this.dateOfBirth}</span>
-          </div>
-        </div>
+      <div class="user-header">
+        <div class="user-icon">${initials}</div>
+        <h2>Your details</h2>
+      </div>
+      <div class="info-grid">
+        <span class="info-label">First Name 👤</span>
+        <span class="info-value">${this.firstName}</span>
+
+        <span class="info-label">Last Name 👥</span>
+        <span class="info-value">${this.lastName}</span>
+
+        <span class="info-label">Email ✉️</span>
+        <span class="info-value">${this.email}</span>
+
+        <span class="info-label">Nationality 🌍</span>
+        <span class="info-value">${this.nationality}</span>
+
+        <span class="info-label">Phone Number 📱</span>
+        <span class="info-value">${this.phoneNumber}</span>
       </div>
     `;
   }

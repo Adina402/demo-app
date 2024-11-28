@@ -1,7 +1,7 @@
-import { LionButton } from '@lion/ui/button.js';
+import { LionButtonSubmit } from '@lion/ui/button.js';
 import { css } from 'lit';
 
-export class StyledLionButton extends LionButton {
+export class StyledLionButton extends LionButtonSubmit {
   static get styles() {
     return [
       ...super.styles,

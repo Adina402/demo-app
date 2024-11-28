@@ -6,16 +6,9 @@ import '../shared/input-email.js';
 import '../shared/input-tel.js';
 import '../shared/select.js';
 import '../shared/date-picker.js';
-
-interface Country {
-  demonyms?: {
-    eng?: {
-      m?: string;
-      f?: string;
-    };
-  };
-  name: { common: string };
-}
+import { sharedStyles } from './shared-styles.js';
+import { UserRegistration } from '../../models/user.model.js';
+import { Country } from '../../models/country.model.js';
 
 @customElement('ui-register-component')
 export class RegisterComponent extends LitElement {
@@ -28,8 +21,6 @@ export class RegisterComponent extends LitElement {
 
   @property({ type: String }) nationality: string = '';
 
-  @property({ type: String }) birthDate: string = '';
-
   @property({ type: String }) emailAddress: string = '';
 
   @property({ type: String }) phoneNumber: string = '';
@@ -38,149 +29,102 @@ export class RegisterComponent extends LitElement {
 
   @property({ type: String }) confirmPassword: string = '';
 
-  static styles = css`
-    :host {
-      display: flex;
-      justify-content: center;
-      padding: 40px 20px;
-      border-radius: 16px;
-      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.08);
-      background-color: #fff;
-      min-height: 50vh;
-      width: 100%;
-    }
+  @property({ type: Boolean }) registrationError: boolean = false;
 
-    @media (max-width: 768px) {
-      :host {
-        padding: 20px 20px;
-      }
-    }
+  @property({ type: String }) errorMessage: string = '';
 
-    .container {
-      display: flex;
-      flex-direction: row;
-      gap: 40px;
-      width: 100%;
-      align-items: center;
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-      }
-    }
-
-    a {
-      color: #873999;
-      text-decoration: none;
-    }
-
-    .form-container {
-      flex: 1;
-    }
-
-    .form-container h2 {
-      text-align: center;
-      color: #774181;
-      font-size: 48px;
-      font-weight: bold;
-    }
-
-    .image-container {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-    }
-
-    .separator-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: auto;
-      width: 100%;
-      height: 100%;
-      position: relative;
-      padding-top: 30px;
-    }
-
-    .separator-container__separator {
-      width: 20px;
-      padding: 10px;
-      border-radius: 4px;
-      border: 1px solid #ccd1d2;
-      position: absolute;
-      background: #ffffff;
-      color: #99a3a4;
-      font-size: 12px;
-      z-index: 999;
-    }
-
-    .separator-container__custom-hr {
-      display: block;
-      width: 100%;
-      height: 1px;
-      background-color: #ccd1d2;
-      margin: 20px 0;
-    }
-
-    .form-footer {
-      display: flex;
-      justify-content: center;
-      padding-top: 3rem;
-      gap: 0.25rem;
-    }
-
-    .button-container {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 20px;
-    }
-
-    .form-footer .footer-link {
-      font-size: 14px;
-    }
-
-    .form-footer .footer-text {
-      color: #001a1c;
-      font-size: 14px;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    @media (max-width: 425px) {
+  static styles = [
+    sharedStyles,
+    css`
       .form-row {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
       }
-    }
 
-    img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
-
-    @media (max-width: 768px) {
-      img {
-        max-width: 70%;
+      @media (max-width: 425px) {
+        .form-row {
+          grid-template-columns: 1fr;
+        }
       }
-    }
-  `;
+    `,
+  ];
 
   firstUpdated() {
     this.fetchNationalities();
+  }
+
+  private validateForm(): boolean {
+    this.registrationError = false;
+    this.errorMessage = '';
+
+    const requiredFields: (keyof UserRegistration)[] = [
+      'firstName',
+      'lastName',
+      'nationality',
+      'emailAddress',
+      'phoneNumber',
+      'password',
+    ];
+
+    for (const field of requiredFields) {
+      if (!this[field]) {
+        this.registrationError = true;
+        this.errorMessage = `Please fill in all required fields.`;
+        return false;
+      }
+    }
+
+    if (this.password !== this.confirmPassword) {
+      this.registrationError = true;
+      this.errorMessage = 'Passwords do not match.';
+      return false;
+    }
+
+    return true;
+  }
+
+  private handleFormSubmit(e: Event): void {
+    e.preventDefault();
+    this.handleLogin();
+  }
+
+  private handleLogin(): void {
+    if (this.validateForm()) {
+      const userRegistration: UserRegistration = {
+        firstName: this.firstName,
+        lastName: this.lastName,
+        nationality: this.nationality,
+        emailAddress: this.emailAddress,
+        phoneNumber: this.phoneNumber,
+        password: this.password,
+      };
+
+      const existingUsers = JSON.parse(
+        localStorage.getItem('registeredUsers') || '[]',
+      );
+      existingUsers.push(userRegistration);
+      localStorage.setItem('registeredUsers', JSON.stringify(existingUsers));
+      this.navigateTo('login');
+    }
   }
 
   render() {
     return html`
       <div class="container">
         <div class="form-container">
-          <lion-form>
+          <lion-form @submit=${this.handleFormSubmit}>
             <form>
               <h2>Register</h2>
+
+              ${this.registrationError
+                ? html`
+                    <div style="color: red; margin-bottom: 10px;">
+                      ${this.errorMessage}
+                    </div>
+                  `
+                : ''}
+
               <div class="form-row">
                 <styled-lion-input
                   name="firstName"
@@ -193,19 +137,12 @@ export class RegisterComponent extends LitElement {
                   @input=${(e: Event) => this.updateField(e, 'lastName')}
                 ></styled-lion-input>
               </div>
-              <div class="form-row">
-                <styled-lion-input-email
-                  name="emailAddress"
-                  label="Email address"
-                  @input=${(e: Event) => this.updateField(e, 'emailAddress')}
-                ></styled-lion-input-email>
 
-                <styled-date-picker
-                  name="birthDate"
-                  label="Birth date"
-                  @input=${(e: Event) => this.updateField(e, 'birthDate')}
-                ></styled-date-picker>
-              </div>
+              <styled-lion-input-email
+                name="emailAddress"
+                label="Email address"
+                @input=${(e: Event) => this.updateField(e, 'emailAddress')}
+              ></styled-lion-input-email>
 
               <styled-select
                 labelText="Choose Your Nationality"
@@ -251,31 +188,29 @@ export class RegisterComponent extends LitElement {
                   @input=${(e: Event) => this.updateField(e, 'confirmPassword')}
                 ></styled-lion-input>
               </div>
+
               <div class="button-container">
-                <styled-lion-button @click=${this.handleLogin}
-                  >Register
-                </styled-lion-button>
-              </div>
-
-              <div class="separator-container">
-                <span class="separator-container__custom-hr"></span>
-                <div class="separator-container__separator">
-                  <span>OR</span>
-                </div>
-              </div>
-
-              <div class="form-footer">
-                <div class="footer-text">Already registered?</div>
-                <a
-                  href="https://www.google.com"
-                  target="_self"
-                  class="footer-link"
-                >
-                  Login
-                </a>
+                <styled-lion-button>Register</styled-lion-button>
               </div>
             </form>
           </lion-form>
+
+          <div class="separator-container">
+            <span class="separator-container__custom-hr"></span>
+            <div class="separator-container__separator">
+              <span>OR</span>
+            </div>
+          </div>
+
+          <div class="form-footer">
+            <div class="footer-text">Already registered?</div>
+            <button
+              class="footer-link"
+              @click=${() => this.navigateTo('login')}
+            >
+              Login
+            </button>
+          </div>
         </div>
         <div class="image-container">
           <img
@@ -296,8 +231,7 @@ export class RegisterComponent extends LitElement {
       | 'lastName'
       | 'firstName'
       | 'phoneNumber'
-      | 'nationality'
-      | 'birthDate',
+      | 'nationality',
   ): void {
     const input = e.target as HTMLInputElement;
     this[field] = input.value;
@@ -321,21 +255,18 @@ export class RegisterComponent extends LitElement {
 
       this.requestUpdate();
     } catch (error) {
-      console.error('Failed to fetch nationalities:', error);
       this.nationalities = [];
       this.requestUpdate();
     }
   }
 
-  private handleLogin(): void {
-    console.log(
-      'Logging in with:',
-      this.emailAddress,
-      this.password,
-      this.lastName,
-      this.firstName,
-      this.phoneNumber,
-      this.birthDate,
+  private navigateTo(view: 'login' | 'register' | 'userInfo') {
+    this.dispatchEvent(
+      new CustomEvent('navigate', {
+        detail: view,
+        bubbles: true,
+        composed: true,
+      }),
     );
   }
 }
