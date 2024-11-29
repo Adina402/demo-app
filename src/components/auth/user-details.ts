@@ -15,17 +15,6 @@ export class UserInfoCard extends LitElement {
   @property({ type: String }) phoneNumber = '';
 
   static styles = css`
-    :host {
-      display: flex;
-      flex-direction: column;
-      padding: 80px 40px;
-      border-radius: 16px;
-      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.08);
-      background-color: #fff;
-      min-height: 60vh;
-      width: 100%;
-    }
-
     .user-header {
       display: flex;
       align-items: center;

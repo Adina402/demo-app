@@ -81,6 +81,20 @@ export class RegisterComponent extends LitElement {
       return false;
     }
 
+    const existingUsers: UserRegistration[] = JSON.parse(
+      localStorage.getItem('registeredUsers') || '[]',
+    );
+
+    const emailExists = existingUsers.some(
+      user => user.emailAddress === this.emailAddress,
+    );
+
+    if (emailExists) {
+      this.registrationError = true;
+      this.errorMessage = 'An account with this email address already exists.';
+      return false;
+    }
+
     return true;
   }
 
@@ -113,8 +127,8 @@ export class RegisterComponent extends LitElement {
     return html`
       <div class="container">
         <div class="form-container">
-          <lion-form @submit=${this.handleFormSubmit}>
-            <form>
+          <lion-form>
+            <form @submit=${this.handleFormSubmit}>
               <h2>Register</h2>
 
               ${this.registrationError
@@ -190,7 +204,7 @@ export class RegisterComponent extends LitElement {
               </div>
 
               <div class="button-container">
-                <styled-lion-button>Register</styled-lion-button>
+                <styled-lion-button type="submit">Register</styled-lion-button>
               </div>
 
               <div class="separator-container">
@@ -203,6 +217,7 @@ export class RegisterComponent extends LitElement {
               <div class="form-footer">
                 <div class="footer-text">Already registered?</div>
                 <button
+                  type="button"
                   class="footer-link"
                   @click=${() => this.navigateTo('login')}
                 >

@@ -23,18 +23,16 @@ export class LoginComponent extends LitElement {
     return html`
       <div class="container">
         <div class="form-container">
-          <lion-form @submit=${this.handleLogin}>
-            <form>
+          <lion-form>
+            <form @submit=${this.handleLogin}>
               <h2>Login</h2>
-              ${
-                this.loginError
-                  ? html`
-                      <div style="color: red; margin-bottom: 15px;">
-                        ${this.loginError}
-                      </div>
-                    `
-                  : ''
-              }
+              ${this.loginError
+                ? html`
+                    <div style="color: red; margin-bottom: 15px;">
+                      ${this.loginError}
+                    </div>
+                  `
+                : ''}
 
               <styled-lion-input-email
                 name="emailAddress"
@@ -50,7 +48,7 @@ export class LoginComponent extends LitElement {
               ></styled-lion-input>
 
               <div class="button-container">
-                <styled-lion-button>Sign in</styled-lion-button>
+                <styled-lion-button type="submit">Sign in</styled-lion-button>
               </div>
 
               <div class="separator-container">
@@ -63,16 +61,16 @@ export class LoginComponent extends LitElement {
               <div class="form-footer">
                 <div class="footer-text">Don't have an account?</div>
                 <button
+                  type="button"
                   class="footer-link"
                   @click=${() => this.navigateTo('register')}
                 >
                   Register
                 </button>
               </div>
+            </form>
+          </lion-form>
         </div>
-        </form>
-        </lion-form>
-
 
         <div class="image-container">
           <img
@@ -89,7 +87,8 @@ export class LoginComponent extends LitElement {
     this[field] = input.value;
   }
 
-  private handleLogin(): void {
+  private handleLogin(e: Event): void {
+    e.preventDefault();
     this.loginError = '';
     const usersJson = localStorage.getItem('registeredUsers');
     if (!usersJson) {
